@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>墨香阁</title>
+    <description>Always a Learner</description>
+    <link>/</link>
+    <atom:link href="/feed.xml" rel="self" type="application/rss+xml" />
+    <pubDate>Fri, 05 Aug 2016 11:36:18 +0800</pubDate>
+    <lastBuildDate>Fri, 05 Aug 2016 11:36:18 +0800</lastBuildDate>
+    <generator>Jekyll v3.2.1</generator>
+    
+      <item>
+        <title>Yah3c 在deepin下运行的问题</title>
+        <description>&lt;h1 id=&quot;deepinyah3c&quot;&gt;deepin下安装yah3c出错&lt;/h1&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;标题虽说是在deepin下安装出错，但是也许也适用于安装多linux系统的机子&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;问题&lt;/h2&gt;
+
+&lt;p&gt;因为喜欢折腾，我的机子除了安装了&lt;code class=&quot;highlighter-rouge&quot;&gt;win10&lt;/code&gt;以外还安装了&lt;code class=&quot;highlighter-rouge&quot;&gt;ubuntu&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;deepin&lt;/code&gt;，但是在使用deepin安装yah3c连接校园网的时候出现了&lt;code class=&quot;highlighter-rouge&quot;&gt;socket.error: [Errno 19] No such device&lt;/code&gt;的报错（具体报错如下）&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;youngdou@youngdou-pc:/etc$ sudo yah3c
+0 - add a new user
+1 - douyy3(eth0)
+Your choice: 1
+Traceback (most recent call last):
+  File &quot;/usr/local/bin/yah3c&quot;, line 5, in &amp;lt;module&amp;gt;
+    yah3c.yah3c.main()
+  File &quot;/usr/local/lib/python2.7/dist-packages/yah3c/yah3c.py&quot;, line 126, in main
+    start_yah3c(login_info)
+  File &quot;/usr/local/lib/python2.7/dist-packages/yah3c/yah3c.py&quot;, line 102, in start_yah3c
+    yah3c = eapauth.EAPAuth(login_info)
+  File &quot;/usr/local/lib/python2.7/dist-packages/yah3c/eapauth.py&quot;, line 34, in __init__
+    self.client.bind((login_info['ethernet_interface'], ETHERTYPE_PAE))
+  File &quot;/usr/lib/python2.7/socket.py&quot;, line 228, in meth
+    return getattr(self._sock,name)(*args)
+socket.error: [Errno 19] No such device
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;原因&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;由python的报错信息可知，代码错误的主要原因是脚本没有找到所设置的网卡&lt;code class=&quot;highlighter-rouge&quot;&gt;socket.error: [Errno 19] No such device&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;这里的原因是创建账户的时候使用了默认设置网卡(eth0网卡)而我的机子的eth0网卡被别处占用了,导致了在deepin下找不到这个网卡&lt;code class=&quot;highlighter-rouge&quot;&gt;在ubuntu是可以设置为eth0的&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;section-2&quot;&gt;解决方案&lt;/h2&gt;
+
+&lt;p&gt;既然是设置的网卡出了问题，那就给他设置一个可用的网卡就行了&lt;/p&gt;
+
+&lt;p&gt;1 . 首先查看机子的网卡信息
+&amp;gt; sudo /sbin/iwconfig&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;youngdou@youngdou-pc:/$ sudo /sbin/iwconfig 
+[sudo] youngdou 的密码：
+wlp4s0    IEEE 802.11bgn  ESSID:off/any  
+          Mode:Managed  Access Point: Not-Associated   Tx-Power=15 dBm   
+          Retry short limit:7   RTS thr:off   Fragment thr:off
+          Encryption key:off
+          Power Management:off
+          
+enp5s0f2  no wireless extensions.
+
+lo        no wireless extensions.
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;这里可以看到我的机子的网卡为&lt;code class=&quot;highlighter-rouge&quot;&gt;enp5s0f2&lt;/code&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;2 .重新给账户设置网卡&lt;/p&gt;
+
+&lt;p&gt;根据yah3c中&lt;code class=&quot;highlighter-rouge&quot;&gt;readme.md&lt;/code&gt;找到账户配置文件重新配置即可&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;sudo vi /etc/yah3c.conf&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;记得加上sudo获得权限
+然后把&lt;code class=&quot;highlighter-rouge&quot;&gt;ethernet_interface=eth0&lt;/code&gt;改为刚刚查到的网卡&lt;code class=&quot;highlighter-rouge&quot;&gt;enp5s0f2&lt;/code&gt;，改完后如下&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;...
+ethernet_interface = enp5s0f2
+...
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;保存以后再用&lt;code class=&quot;highlighter-rouge&quot;&gt;sudo yah3c&lt;/code&gt;登陆你的账号吧～是否大功告成了呢？&lt;/p&gt;
+
+</description>
+        <pubDate>Wed, 03 Aug 2016 00:00:00 +0800</pubDate>
+        <link>/2016/08/03/yah3c-socket-no-such-device/</link>
+        <guid isPermaLink="true">/2016/08/03/yah3c-socket-no-such-device/</guid>
+        
+        <category>deepin</category>
+        
+        <category>Linux</category>
+        
+        <category>yah3c</category>
+        
+        
+      </item>
+    
+  </channel>
+</rss>
