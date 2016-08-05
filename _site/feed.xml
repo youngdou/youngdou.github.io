@@ -5,9 +5,119 @@
     <description>Always a Learner</description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Fri, 05 Aug 2016 11:36:18 +0800</pubDate>
-    <lastBuildDate>Fri, 05 Aug 2016 11:36:18 +0800</lastBuildDate>
+    <pubDate>Fri, 05 Aug 2016 12:19:03 +0800</pubDate>
+    <lastBuildDate>Fri, 05 Aug 2016 12:19:03 +0800</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
+    
+      <item>
+        <title>部署简单的tornado+mysql服务器</title>
+        <description>&lt;h1 id=&quot;getting-start&quot;&gt;Getting start&lt;/h1&gt;
+&lt;blockquote&gt;
+  &lt;h2 id=&quot;tornadomysql&quot;&gt;部署简单的tornado+mysql服务器&lt;/h2&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;本文来自于个人项目的readme文档
+&lt;a href=&quot;https://github.com/youngdou/Activity-Publisher-for-WeChat/blob/master/README.md&quot;&gt;README.MD&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;mysql&quot;&gt;安装Mysql&lt;/h2&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;//这里请记住密码和数据库端口号，如果没有设置，一般默认为3306
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;tornadotorndb&quot;&gt;安装tornado和torndb&lt;/h2&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pip install tornado
+pip install torndb
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;必要时加sudo&lt;/p&gt;
+
+&lt;h2 id=&quot;mysql-python&quot;&gt;安装Mysql-Python数据库驱动&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;出现错误： &lt;code class=&quot;highlighter-rouge&quot;&gt;fatal error: Python.h: No such file or directory&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;原因：没有安装python开发包&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;解决:：&lt;code class=&quot;highlighter-rouge&quot;&gt;apt-get install Python-dev&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;创建数据库&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;首先登陆数据库&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;创建数据库&lt;code class=&quot;highlighter-rouge&quot;&gt;Activity&lt;/code&gt;和表&lt;code class=&quot;highlighter-rouge&quot;&gt;activity&lt;/code&gt;(复制目录下的&lt;code class=&quot;highlighter-rouge&quot;&gt;schema.sql&lt;/code&gt;到数据库执行即可)&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;修改server.py里面的数据库地址/端口和密码为本地数据库的相关值,可供修改内容如下&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;define(&quot;mysql_host&quot;, default=&quot;127.0.0.1:3306&quot;, help=&quot;database host&quot;)
+define(&quot;mysql_database&quot;, default=&quot;Activity&quot;, help=&quot;database name&quot;)
+define(&quot;mysql_user&quot;, default=&quot;root&quot;, help=&quot;database user&quot;)
+define(&quot;mysql_password&quot;, default=&quot;password&quot;, help=&quot;database password&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;运行服务器&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;命令
+&lt;code class=&quot;highlighter-rouge&quot;&gt;python
+python server.py
+&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;问题
+1.如果遇到：&lt;code class=&quot;highlighter-rouge&quot;&gt;socket.error: [Errno 13] Permission denied&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;请使用&lt;code class=&quot;highlighter-rouge&quot;&gt;sudo python server.py&lt;/code&gt;重新执行命令&lt;/li&gt;
+  &lt;li&gt;或者检查端口号是否被其他应用占用&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;2.如果遇到：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;UserWarning: /home/ubuntu/.python-eggs is writable by group/others and vulnerable to attack when used with get_resource_filename. Consider a more secure location (set with .set_extraction_path or the PYTHON_EGG_CACHE environment variable).
+warnings.warn(msg, UserWarning)
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;这是.python-eggs缺少权限导致的&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;进入&lt;code class=&quot;highlighter-rouge&quot;&gt;/home/ubuntu&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;执行&lt;code class=&quot;highlighter-rouge&quot;&gt;chmod g-wx,o-wx .python-eggs/&lt;/code&gt;即可&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;如果完成以上步骤以后，在浏览器/ping/curl访问不了，有可能是云主机的安全组问题—没有开放相关端口，请到云主机管理后台进行设置&lt;/p&gt;
+&lt;/blockquote&gt;
+
+</description>
+        <pubDate>Fri, 05 Aug 2016 00:00:00 +0800</pubDate>
+        <link>/2016/08/05/build-tornado-mysql-tecentyun/</link>
+        <guid isPermaLink="true">/2016/08/05/build-tornado-mysql-tecentyun/</guid>
+        
+        <category>云主机</category>
+        
+        <category>Linux</category>
+        
+        <category>tornado</category>
+        
+        
+      </item>
     
       <item>
         <title>Yah3c 在deepin下运行的问题</title>

@@ -44,6 +44,7 @@ pip install torndb
 2. 创建数据库`Activity`和表`activity`(复制目录下的`schema.sql`到数据库执行即可)
 
 3. 修改server.py里面的数据库地址/端口和密码为本地数据库的相关值,可供修改内容如下
+
 ```
 define("mysql_host", default="127.0.0.1:3306", help="database host")
 define("mysql_database", default="Activity", help="database name")
@@ -64,11 +65,13 @@ python server.py
  2. 或者检查端口号是否被其他应用占用
  
  2.如果遇到：
+
 ```
 UserWarning: /home/ubuntu/.python-eggs is writable by group/others and vulnerable to attack when used with get_resource_filename. Consider a more secure location (set with .set_extraction_path or the PYTHON_EGG_CACHE environment variable).
 warnings.warn(msg, UserWarning)
 
 ```
+
 这是.python-eggs缺少权限导致的
 
 1. 进入`/home/ubuntu`

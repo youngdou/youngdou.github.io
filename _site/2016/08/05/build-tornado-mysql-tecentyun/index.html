@@ -10,9 +10,9 @@
     <meta name="keywords"  content="young, youngdou, 耀勇">
     <link rel="shortcut icon" href="/img/favicon.ico">
 
-    <title>Yah3c 在deepin下运行的问题 - 墨香阁 | Young Blog</title>
+    <title>部署简单的tornado+mysql服务器 - 墨香阁 | Young Blog</title>
 
-    <link rel="canonical" href="/2016/08/03/yah3c-socket-no-such-device/">
+    <link rel="canonical" href="/2016/08/05/build-tornado-mysql-tecentyun/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -170,19 +170,19 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#deepin" title="deepin">deepin</a>
+                        <a class="tag" href="/tags/#云主机" title="云主机">云主机</a>
                         
                         <a class="tag" href="/tags/#Linux" title="Linux">Linux</a>
                         
-                        <a class="tag" href="/tags/#yah3c" title="yah3c">yah3c</a>
+                        <a class="tag" href="/tags/#tornado" title="tornado">tornado</a>
                         
                     </div>
-                    <h1>Yah3c 在deepin下运行的问题</h1>
+                    <h1>部署简单的tornado+mysql服务器</h1>
                     
                     
-                    <h2 class="subheading">deepin下安装yah3c出错(no such device)</h2>
+                    <h2 class="subheading"></h2>
                     
-                    <span class="meta">Posted by Young Dou on August 3, 2016</span>
+                    <span class="meta">Posted by Young Dou on August 5, 2016</span>
                 </div>
             </div>
         </div>
@@ -200,95 +200,99 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-				<h1 id="deepinyah3c">deepin下安装yah3c出错</h1>
-
+				<h1 id="getting-start">Getting start</h1>
 <blockquote>
-  <p>标题虽说是在deepin下安装出错，但是也许也适用于安装多linux系统的机子</p>
+  <h2 id="tornadomysql">部署简单的tornado+mysql服务器</h2>
 </blockquote>
 
-<hr />
+<p>本文来自于个人项目的readme文档
+<a href="https://github.com/youngdou/Activity-Publisher-for-WeChat/blob/master/README.md">README.MD</a></p>
 
-<h2 id="section">问题</h2>
-
-<p>因为喜欢折腾，我的机子除了安装了<code class="highlighter-rouge">win10</code>以外还安装了<code class="highlighter-rouge">ubuntu</code>和<code class="highlighter-rouge">deepin</code>，但是在使用deepin安装yah3c连接校园网的时候出现了<code class="highlighter-rouge">socket.error: [Errno 19] No such device</code>的报错（具体报错如下）</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>youngdou@youngdou-pc:/etc$ sudo yah3c
-0 - add a new user
-1 - douyy3(eth0)
-Your choice: 1
-Traceback (most recent call last):
-  File "/usr/local/bin/yah3c", line 5, in &lt;module&gt;
-    yah3c.yah3c.main()
-  File "/usr/local/lib/python2.7/dist-packages/yah3c/yah3c.py", line 126, in main
-    start_yah3c(login_info)
-  File "/usr/local/lib/python2.7/dist-packages/yah3c/yah3c.py", line 102, in start_yah3c
-    yah3c = eapauth.EAPAuth(login_info)
-  File "/usr/local/lib/python2.7/dist-packages/yah3c/eapauth.py", line 34, in __init__
-    self.client.bind((login_info['ethernet_interface'], ETHERTYPE_PAE))
-  File "/usr/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 19] No such device
-
+<h2 id="mysql">安装Mysql</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code>//这里请记住密码和数据库端口号，如果没有设置，一般默认为3306
 </code></pre>
 </div>
-<hr />
 
-<h2 id="section-1">原因</h2>
+<h2 id="tornadotorndb">安装tornado和torndb</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code>pip install tornado
+pip install torndb
+</code></pre>
+</div>
+<p>必要时加sudo</p>
+
+<h2 id="mysql-python">安装Mysql-Python数据库驱动</h2>
 
 <ul>
   <li>
-    <p>由python的报错信息可知，代码错误的主要原因是脚本没有找到所设置的网卡<code class="highlighter-rouge">socket.error: [Errno 19] No such device</code></p>
+    <p>出现错误： <code class="highlighter-rouge">fatal error: Python.h: No such file or directory</code></p>
   </li>
   <li>
-    <p>这里的原因是创建账户的时候使用了默认设置网卡(eth0网卡)而我的机子的eth0网卡被别处占用了,导致了在deepin下找不到这个网卡<code class="highlighter-rouge">在ubuntu是可以设置为eth0的</code></p>
+    <p>原因：没有安装python开发包</p>
+  </li>
+  <li>
+    <p>解决:：<code class="highlighter-rouge">apt-get install Python-dev</code></p>
   </li>
 </ul>
 
-<hr />
+<h2 id="section">创建数据库</h2>
 
-<h2 id="section-2">解决方案</h2>
+<ol>
+  <li>
+    <p>首先登陆数据库</p>
+  </li>
+  <li>
+    <p>创建数据库<code class="highlighter-rouge">Activity</code>和表<code class="highlighter-rouge">activity</code>(复制目录下的<code class="highlighter-rouge">schema.sql</code>到数据库执行即可)</p>
+  </li>
+  <li>
+    <p>修改server.py里面的数据库地址/端口和密码为本地数据库的相关值,可供修改内容如下</p>
+  </li>
+</ol>
 
-<p>既然是设置的网卡出了问题，那就给他设置一个可用的网卡就行了</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>define("mysql_host", default="127.0.0.1:3306", help="database host")
+define("mysql_database", default="Activity", help="database name")
+define("mysql_user", default="root", help="database user")
+define("mysql_password", default="password", help="database password")
+</code></pre>
+</div>
 
-<p>1 . 首先查看机子的网卡信息
-&gt; sudo /sbin/iwconfig</p>
+<h2 id="section-1">运行服务器</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>youngdou@youngdou-pc:/$ sudo /sbin/iwconfig 
-[sudo] youngdou 的密码：
-wlp4s0    IEEE 802.11bgn  ESSID:off/any  
-          Mode:Managed  Access Point: Not-Associated   Tx-Power=15 dBm   
-          Retry short limit:7   RTS thr:off   Fragment thr:off
-          Encryption key:off
-          Power Management:off
-          
-enp5s0f2  no wireless extensions.
+<ul>
+  <li>命令
+<code class="highlighter-rouge">python
+python server.py
+</code></li>
+  <li>问题
+1.如果遇到：<code class="highlighter-rouge">socket.error: [Errno 13] Permission denied</code></li>
+</ul>
 
-lo        no wireless extensions.
+<ol>
+  <li>请使用<code class="highlighter-rouge">sudo python server.py</code>重新执行命令</li>
+  <li>或者检查端口号是否被其他应用占用</li>
+</ol>
+
+<p>2.如果遇到：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>UserWarning: /home/ubuntu/.python-eggs is writable by group/others and vulnerable to attack when used with get_resource_filename. Consider a more secure location (set with .set_extraction_path or the PYTHON_EGG_CACHE environment variable).
+warnings.warn(msg, UserWarning)
 
 </code></pre>
 </div>
-<p>这里可以看到我的机子的网卡为<code class="highlighter-rouge">enp5s0f2</code></p>
 
-<hr />
+<p>这是.python-eggs缺少权限导致的</p>
 
-<p>2 .重新给账户设置网卡</p>
-
-<p>根据yah3c中<code class="highlighter-rouge">readme.md</code>找到账户配置文件重新配置即可</p>
+<ol>
+  <li>
+    <p>进入<code class="highlighter-rouge">/home/ubuntu</code></p>
+  </li>
+  <li>
+    <p>执行<code class="highlighter-rouge">chmod g-wx,o-wx .python-eggs/</code>即可</p>
+  </li>
+</ol>
 
 <blockquote>
-  <p>sudo vi /etc/yah3c.conf</p>
+  <p>如果完成以上步骤以后，在浏览器/ping/curl访问不了，有可能是云主机的安全组问题—没有开放相关端口，请到云主机管理后台进行设置</p>
 </blockquote>
-
-<p>记得加上sudo获得权限
-然后把<code class="highlighter-rouge">ethernet_interface=eth0</code>改为刚刚查到的网卡<code class="highlighter-rouge">enp5s0f2</code>，改完后如下</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>...
-ethernet_interface = enp5s0f2
-...
-
-</code></pre>
-</div>
-<p>保存以后再用<code class="highlighter-rouge">sudo yah3c</code>登陆你的账号吧～是否大功告成了呢？</p>
 
 
 
@@ -299,21 +303,19 @@ ethernet_interface = enp5s0f2
                 </style>
                 <div class="ds-share"
                     style="text-align: right"
-                    data-thread-key="/2016/08/03/yah3c-socket-no-such-device"
-                    data-title="Yah3c 在deepin下运行的问题"
-                    data-url="/2016/08/03/yah3c-socket-no-such-device/"
+                    data-thread-key="/2016/08/05/build-tornado-mysql-tecentyun"
+                    data-title="部署简单的tornado+mysql服务器"
+                    data-url="/2016/08/05/build-tornado-mysql-tecentyun/"
                     data-images="/img/home-bg.jpg"
-                    data-content="deepin下安装yah3c出错
+                    data-content="Getting start
+
+  部署简单的tornado+mysql服务器
 
 
-  标题虽说是在deepin下安装出错，但是也许也适用于安装多linux系统的机子
+本文来自于个人项目的readme文档
+README.MD
 
-
-
-
-问题
-
-因为喜欢折腾，我... | 墨香阁 | Young Blog " >
+安装Mysq... | 墨香阁 | Young Blog " >
                     <div class="ds-share-inline">
                       <ul  class="ds-share-icons-16">
                         <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
@@ -332,13 +334,13 @@ ethernet_interface = enp5s0f2
 
                 <ul class="pager">
                     
-                    
-                    <li class="next">
-                        <a href="/2016/08/05/build-tornado-mysql-tecentyun/" data-toggle="tooltip" data-placement="top" title="部署简单的tornado+mysql服务器">
-                        Next<br>
-                        <span>部署简单的tornado+mysql服务器</span>
+                    <li class="previous">
+                        <a href="/2016/08/03/yah3c-socket-no-such-device/" data-toggle="tooltip" data-placement="top" title="Yah3c 在deepin下运行的问题">
+                        Previous<br>
+                        <span>Yah3c 在deepin下运行的问题</span>
                         </a>
                     </li>
+                    
                     
                 </ul>
 
@@ -347,9 +349,9 @@ ethernet_interface = enp5s0f2
                 <!-- 多说评论框 start -->
                 <div class="comment">
                     <div class="ds-thread"
-                        data-thread-key="/2016/08/03/yah3c-socket-no-such-device"
-                        data-title="Yah3c 在deepin下运行的问题"
-                        data-url="/2016/08/03/yah3c-socket-no-such-device/" >
+                        data-thread-key="/2016/08/05/build-tornado-mysql-tecentyun"
+                        data-title="部署简单的tornado+mysql服务器"
+                        data-url="/2016/08/05/build-tornado-mysql-tecentyun/" >
                     </div>
                 </div>
                 <!-- 多说评论框 end -->
