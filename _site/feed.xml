@@ -5,9 +5,113 @@
     <description>Always a Learner</description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Fri, 05 Aug 2016 12:19:03 +0800</pubDate>
-    <lastBuildDate>Fri, 05 Aug 2016 12:19:03 +0800</lastBuildDate>
+    <pubDate>Thu, 11 Aug 2016 00:03:52 +0800</pubDate>
+    <lastBuildDate>Thu, 11 Aug 2016 00:03:52 +0800</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
+    
+      <item>
+        <title>ssd登录服务器保持进程运行</title>
+        <description>&lt;h2 id=&quot;section&quot;&gt;阿里云部署中遇到的问题&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;在用ssd连接服务器以后运行了服务器脚本&lt;code class=&quot;highlighter-rouge&quot;&gt;python server.py&lt;/code&gt;，但是一旦手动断开ssd和云服务器的连接，服务器脚本就会自动关闭导致无法访问&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;解决&lt;/strong&gt;：
+&lt;a href=&quot;http://www.ibm.com/developerworks/cn/linux/l-cn-screen/&quot;&gt;参考传送门&lt;/a&gt;
+简单来说就是，用xshell登录云服务器ssh的时候是创建了一个会话，在断开ssh连接的时候会触发会话进程的signup信号，从而导致了进程被kill掉。
+1. 可以通过&lt;code class=&quot;highlighter-rouge&quot;&gt;nohup python server.py &amp;amp;&lt;/code&gt;来解决（其中&lt;code class=&quot;highlighter-rouge&quot;&gt;nohup&lt;/code&gt;是使得相关进程忽略signup信号，&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;amp;&lt;/code&gt;是让进程在后台执行）
+2. 可以通过使用窗口管理软件&lt;code class=&quot;highlighter-rouge&quot;&gt;screen&lt;/code&gt;来管理相关进程，从而避免被signup信号kill掉&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;具体讲解：
+1. 首先在xshell登录ssh,并执行&lt;code class=&quot;highlighter-rouge&quot;&gt;top&lt;/code&gt;:&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/post_imag/2016-08/101.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;在xshell开多一个会话窗口，执行&lt;code class=&quot;highlighter-rouge&quot;&gt;pstree&lt;/code&gt;：&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/post_imag/2016-08/102.png&quot; alt=&quot;image&quot; /&gt;
+++可见新窗口和旧窗口的父进程都来自sshd++&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;在阿里云管理端开一个pstree:&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/post_imag/2016-08/103.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;++发现阿里云开的bash的父进程是系统的login进程，而不是ssdh, 这也揭示了为什么在阿里云管理端运行的进程在断开连接时还可以在后台运行，而xshell连接（ssd连接）就不行&lt;em&gt;（参考开头的技术文章链接）&lt;/em&gt;++&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;使用刚才所说的方法进行解决&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;执行&lt;code class=&quot;highlighter-rouge&quot;&gt;nohup python server.py &amp;amp;&lt;/code&gt; 然后关闭会话以后
+在阿里云管理端可以看到：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/post_imag/2016-08/104.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;虽然sshd进程下已经没有了bash子进程，但是python进程还在，可见这个方法是可行的&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;方法二&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;执行&lt;code class=&quot;highlighter-rouge&quot;&gt;screen vim test.md&lt;/code&gt; 然后同时按下&lt;code class=&quot;highlighter-rouge&quot;&gt;ctrl+a+c&lt;/code&gt;。这时会从vim界面回到bash界面；同样我们执行&lt;code class=&quot;highlighter-rouge&quot;&gt;screen python&lt;/code&gt;,然后同时按下&lt;code class=&quot;highlighter-rouge&quot;&gt;ctrl+a+c&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;此时，在xshell&lt;code class=&quot;highlighter-rouge&quot;&gt;pstree&lt;/code&gt;看到如下：&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/post_imag/2016-08/105.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;果然在screen的一个会话里面下开了多个窗口&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;断开xshell连接，在管理端可见：&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/post_imag/2016-08/106.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;嘿嘿嘿，诚不我欺，screen作为和sshd的兄弟进程出现了&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;在管理端打开窗口：&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;screen -ls &lt;/code&gt;查看到一个实例，&lt;code class=&quot;highlighter-rouge&quot;&gt;screen -r [示例id]&lt;/code&gt;（此处没有截到图）&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;注意:一定要搞清楚screen中的：screen, session,window三个概念，了解了这三个概念其实就了解了如何使用screen&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;参考资料：
+- &lt;a href=&quot;http://www.ibm.com/developerworks/cn/aix/library/au-gnu_screen/&quot;&gt;搞清楚screen, session,window三个概念&lt;/a&gt;
+- 清除一个session的方法: &lt;code class=&quot;highlighter-rouge&quot;&gt;screen -S [sessionName] -X quit&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;screen -r [实例id]其实是切换到了xshell断开前的界面，没错断开前的历史界面，历史操作等都被screen保存了
+&lt;img src=&quot;/img/post_imag/2016-08/107.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;此时键入&lt;code class=&quot;highlighter-rouge&quot;&gt;pstree&lt;/code&gt;:
+&lt;img src=&quot;/img/post_imag/2016-08/108.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+</description>
+        <pubDate>Wed, 10 Aug 2016 00:00:00 +0800</pubDate>
+        <link>/2016/08/10/server-keep-alive-proccess/</link>
+        <guid isPermaLink="true">/2016/08/10/server-keep-alive-proccess/</guid>
+        
+        <category>云主机</category>
+        
+        <category>Linux</category>
+        
+        <category>Screen</category>
+        
+        
+      </item>
     
       <item>
         <title>部署简单的tornado+mysql服务器</title>

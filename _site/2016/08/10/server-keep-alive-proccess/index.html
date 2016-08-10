@@ -10,9 +10,9 @@
     <meta name="keywords"  content="young, youngdou, 耀勇">
     <link rel="shortcut icon" href="/img/favicon.ico">
 
-    <title>Yah3c 在deepin下运行的问题 - 墨香阁 | Young Blog</title>
+    <title>ssd登录服务器保持进程运行 - 墨香阁 | Young Blog</title>
 
-    <link rel="canonical" href="/2016/08/03/yah3c-socket-no-such-device/">
+    <link rel="canonical" href="/2016/08/10/server-keep-alive-proccess/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -170,19 +170,19 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#deepin" title="deepin">deepin</a>
+                        <a class="tag" href="/tags/#云主机" title="云主机">云主机</a>
                         
                         <a class="tag" href="/tags/#Linux" title="Linux">Linux</a>
                         
-                        <a class="tag" href="/tags/#yah3c" title="yah3c">yah3c</a>
+                        <a class="tag" href="/tags/#Screen" title="Screen">Screen</a>
                         
                     </div>
-                    <h1>Yah3c 在deepin下运行的问题</h1>
+                    <h1>ssd登录服务器保持进程运行</h1>
                     
                     
-                    <h2 class="subheading">deepin下安装yah3c出错(no such device)</h2>
+                    <h2 class="subheading"></h2>
                     
-                    <span class="meta">Posted by Young Dou on August 3, 2016</span>
+                    <span class="meta">Posted by Young Dou on August 10, 2016</span>
                 </div>
             </div>
         </div>
@@ -200,96 +200,94 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-				<h1 id="deepinyah3c">deepin下安装yah3c出错</h1>
-
-<blockquote>
-  <p>标题虽说是在deepin下安装出错，但是也许也适用于安装多linux系统的机子</p>
-</blockquote>
-
-<hr />
-
-<h2 id="section">问题</h2>
-
-<p>因为喜欢折腾，我的机子除了安装了<code class="highlighter-rouge">win10</code>以外还安装了<code class="highlighter-rouge">ubuntu</code>和<code class="highlighter-rouge">deepin</code>，但是在使用deepin安装yah3c连接校园网的时候出现了<code class="highlighter-rouge">socket.error: [Errno 19] No such device</code>的报错（具体报错如下）</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>youngdou@youngdou-pc:/etc$ sudo yah3c
-0 - add a new user
-1 - douyy3(eth0)
-Your choice: 1
-Traceback (most recent call last):
-  File "/usr/local/bin/yah3c", line 5, in &lt;module&gt;
-    yah3c.yah3c.main()
-  File "/usr/local/lib/python2.7/dist-packages/yah3c/yah3c.py", line 126, in main
-    start_yah3c(login_info)
-  File "/usr/local/lib/python2.7/dist-packages/yah3c/yah3c.py", line 102, in start_yah3c
-    yah3c = eapauth.EAPAuth(login_info)
-  File "/usr/local/lib/python2.7/dist-packages/yah3c/eapauth.py", line 34, in __init__
-    self.client.bind((login_info['ethernet_interface'], ETHERTYPE_PAE))
-  File "/usr/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 19] No such device
-
-</code></pre>
-</div>
-<hr />
-
-<h2 id="section-1">原因</h2>
-
+				<h2 id="section">阿里云部署中遇到的问题</h2>
 <ul>
-  <li>
-    <p>由python的报错信息可知，代码错误的主要原因是脚本没有找到所设置的网卡<code class="highlighter-rouge">socket.error: [Errno 19] No such device</code></p>
-  </li>
-  <li>
-    <p>这里的原因是创建账户的时候使用了默认设置网卡(eth0网卡)而我的机子的eth0网卡被别处占用了,导致了在deepin下找不到这个网卡<code class="highlighter-rouge">在ubuntu是可以设置为eth0的</code></p>
-  </li>
+  <li>在用ssd连接服务器以后运行了服务器脚本<code class="highlighter-rouge">python server.py</code>，但是一旦手动断开ssd和云服务器的连接，服务器脚本就会自动关闭导致无法访问</li>
 </ul>
 
-<hr />
-
-<h2 id="section-2">解决方案</h2>
-
-<p>既然是设置的网卡出了问题，那就给他设置一个可用的网卡就行了</p>
-
-<p>1 . 首先查看机子的网卡信息
-&gt; sudo /sbin/iwconfig</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>youngdou@youngdou-pc:/$ sudo /sbin/iwconfig 
-[sudo] youngdou 的密码：
-wlp4s0    IEEE 802.11bgn  ESSID:off/any  
-          Mode:Managed  Access Point: Not-Associated   Tx-Power=15 dBm   
-          Retry short limit:7   RTS thr:off   Fragment thr:off
-          Encryption key:off
-          Power Management:off
-          
-enp5s0f2  no wireless extensions.
-
-lo        no wireless extensions.
-
-</code></pre>
-</div>
-<p>这里可以看到我的机子的网卡为<code class="highlighter-rouge">enp5s0f2</code></p>
-
-<hr />
-
-<p>2 .重新给账户设置网卡</p>
-
-<p>根据yah3c中<code class="highlighter-rouge">readme.md</code>找到账户配置文件重新配置即可</p>
-
 <blockquote>
-  <p>sudo vi /etc/yah3c.conf</p>
+  <p><strong>解决</strong>：
+<a href="http://www.ibm.com/developerworks/cn/linux/l-cn-screen/">参考传送门</a>
+简单来说就是，用xshell登录云服务器ssh的时候是创建了一个会话，在断开ssh连接的时候会触发会话进程的signup信号，从而导致了进程被kill掉。
+1. 可以通过<code class="highlighter-rouge">nohup python server.py &amp;</code>来解决（其中<code class="highlighter-rouge">nohup</code>是使得相关进程忽略signup信号，<code class="highlighter-rouge">&amp;</code>是让进程在后台执行）
+2. 可以通过使用窗口管理软件<code class="highlighter-rouge">screen</code>来管理相关进程，从而避免被signup信号kill掉</p>
 </blockquote>
 
-<p>记得加上sudo获得权限
-然后把<code class="highlighter-rouge">ethernet_interface=eth0</code>改为刚刚查到的网卡<code class="highlighter-rouge">enp5s0f2</code>，改完后如下</p>
+<blockquote>
+  <p>具体讲解：
+1. 首先在xshell登录ssh,并执行<code class="highlighter-rouge">top</code>:</p>
+</blockquote>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>...
-ethernet_interface = enp5s0f2
-...
+<p><img src="/img/post_imag/2016-08/101.png" alt="image" /></p>
 
-</code></pre>
-</div>
-<p>保存以后再用<code class="highlighter-rouge">sudo yah3c</code>登陆你的账号吧～是否大功告成了呢？</p>
+<ol>
+  <li>在xshell开多一个会话窗口，执行<code class="highlighter-rouge">pstree</code>：</li>
+</ol>
 
+<p><img src="/img/post_imag/2016-08/102.png" alt="image" />
+++可见新窗口和旧窗口的父进程都来自sshd++</p>
+
+<ol>
+  <li>在阿里云管理端开一个pstree:</li>
+</ol>
+
+<p><img src="/img/post_imag/2016-08/103.png" alt="image" /></p>
+
+<p>++发现阿里云开的bash的父进程是系统的login进程，而不是ssdh, 这也揭示了为什么在阿里云管理端运行的进程在断开连接时还可以在后台运行，而xshell连接（ssd连接）就不行<em>（参考开头的技术文章链接）</em>++</p>
+
+<ol>
+  <li>使用刚才所说的方法进行解决</li>
+</ol>
+
+<p>执行<code class="highlighter-rouge">nohup python server.py &amp;</code> 然后关闭会话以后
+在阿里云管理端可以看到：</p>
+
+<p><img src="/img/post_imag/2016-08/104.png" alt="image" /></p>
+
+<p>虽然sshd进程下已经没有了bash子进程，但是python进程还在，可见这个方法是可行的</p>
+
+<blockquote>
+  <p>方法二</p>
+</blockquote>
+
+<ol>
+  <li>执行<code class="highlighter-rouge">screen vim test.md</code> 然后同时按下<code class="highlighter-rouge">ctrl+a+c</code>。这时会从vim界面回到bash界面；同样我们执行<code class="highlighter-rouge">screen python</code>,然后同时按下<code class="highlighter-rouge">ctrl+a+c</code>.</li>
+  <li>此时，在xshell<code class="highlighter-rouge">pstree</code>看到如下：</li>
+</ol>
+
+<p><img src="/img/post_imag/2016-08/105.png" alt="image" /></p>
+
+<p>果然在screen的一个会话里面下开了多个窗口</p>
+
+<ol>
+  <li>断开xshell连接，在管理端可见：</li>
+</ol>
+
+<p><img src="/img/post_imag/2016-08/106.png" alt="image" /></p>
+
+<p>嘿嘿嘿，诚不我欺，screen作为和sshd的兄弟进程出现了</p>
+
+<ol>
+  <li>在管理端打开窗口：</li>
+</ol>
+
+<p><code class="highlighter-rouge">screen -ls </code>查看到一个实例，<code class="highlighter-rouge">screen -r [示例id]</code>（此处没有截到图）</p>
+
+<blockquote>
+  <p>注意:一定要搞清楚screen中的：screen, session,window三个概念，了解了这三个概念其实就了解了如何使用screen</p>
+</blockquote>
+
+<blockquote>
+  <p>参考资料：
+- <a href="http://www.ibm.com/developerworks/cn/aix/library/au-gnu_screen/">搞清楚screen, session,window三个概念</a>
+- 清除一个session的方法: <code class="highlighter-rouge">screen -S [sessionName] -X quit</code></p>
+</blockquote>
+
+<p>screen -r [实例id]其实是切换到了xshell断开前的界面，没错断开前的历史界面，历史操作等都被screen保存了
+<img src="/img/post_imag/2016-08/107.png" alt="image" /></p>
+
+<p>此时键入<code class="highlighter-rouge">pstree</code>:
+<img src="/img/post_imag/2016-08/108.png" alt="image" /></p>
 
 
                 <hr>
@@ -299,21 +297,13 @@ ethernet_interface = enp5s0f2
                 </style>
                 <div class="ds-share"
                     style="text-align: right"
-                    data-thread-key="/2016/08/03/yah3c-socket-no-such-device"
-                    data-title="Yah3c 在deepin下运行的问题"
-                    data-url="/2016/08/03/yah3c-socket-no-such-device/"
+                    data-thread-key="/2016/08/10/server-keep-alive-proccess"
+                    data-title="ssd登录服务器保持进程运行"
+                    data-url="/2016/08/10/server-keep-alive-proccess/"
                     data-images="/img/home-bg.jpg"
-                    data-content="deepin下安装yah3c出错
+                    data-content="阿里云部署中遇到的问题
 
-
-  标题虽说是在deepin下安装出错，但是也许也适用于安装多linux系统的机子
-
-
-
-
-问题
-
-因为喜欢折腾，我... | 墨香阁 | Young Blog " >
+  在用ssd连接服务器以后运行了服务器脚本python server.py，但是一旦手动断开ssd和云服务器的连接，服务器脚本... | 墨香阁 | Young Blog " >
                     <div class="ds-share-inline">
                       <ul  class="ds-share-icons-16">
                         <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
@@ -332,13 +322,13 @@ ethernet_interface = enp5s0f2
 
                 <ul class="pager">
                     
-                    
-                    <li class="next">
+                    <li class="previous">
                         <a href="/2016/08/05/build-tornado-mysql-tecentyun/" data-toggle="tooltip" data-placement="top" title="部署简单的tornado+mysql服务器">
-                        Next<br>
+                        Previous<br>
                         <span>部署简单的tornado+mysql服务器</span>
                         </a>
                     </li>
+                    
                     
                 </ul>
 
@@ -347,9 +337,9 @@ ethernet_interface = enp5s0f2
                 <!-- 多说评论框 start -->
                 <div class="comment">
                     <div class="ds-thread"
-                        data-thread-key="/2016/08/03/yah3c-socket-no-such-device"
-                        data-title="Yah3c 在deepin下运行的问题"
-                        data-url="/2016/08/03/yah3c-socket-no-such-device/" >
+                        data-thread-key="/2016/08/10/server-keep-alive-proccess"
+                        data-title="ssd登录服务器保持进程运行"
+                        data-url="/2016/08/10/server-keep-alive-proccess/" >
                     </div>
                 </div>
                 <!-- 多说评论框 end -->

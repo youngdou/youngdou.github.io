@@ -173,6 +173,31 @@
             ">
     			
 <div class="post-preview">
+    <a href="/2016/08/10/server-keep-alive-proccess/">
+        <h2 class="post-title">
+            ssd登录服务器保持进程运行
+        </h2>
+        
+        <div class="post-content-preview">
+            阿里云部署中遇到的问题
+
+  在用ssd连接服务器以后运行了服务器脚本python server.py，但是一旦手动断开ssd和云服务器的连接，服务器脚本就会自动关闭导致无法访问
+
+
+
+  解决：
+参考传送门
+简单来说就是，用xshell登录云服务器ssh的时候是创建了一个会话，在断开ssh连接的时候会触发会话进程的signup信号，从而导致了进程被kill掉。
+1. 可以通过nohup p...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Young Dou on August 10, 2016
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
     <a href="/2016/08/05/build-tornado-mysql-tecentyun/">
         <h2 class="post-title">
             部署简单的tornado+mysql服务器
@@ -263,11 +288,17 @@ youngd...
                             
                         
                             
-                                <a href="/tags/#Linux" title="Linux" rel="2">
+                                <a href="/tags/#Linux" title="Linux" rel="3">
                                     Linux
                                 </a>
                             
                         
+                            
+                        
+                            
+                                <a href="/tags/#云主机" title="云主机" rel="2">
+                                    云主机
+                                </a>
                             
                         
                             
@@ -355,7 +386,7 @@ youngd...
                 <p class="copyright text-muted">
                     Copyright &copy; 墨香阁 2016
                     <br>
-                    Theme Based By <a href="http://huangxuan.me">Hux</a> <!-- |
+                    Theme Based On <a href="http://huangxuan.me">Hux</a> <!-- |
                     <iframe
                         style="margin-left: 2px; margin-bottom:-5px;"
                         frameborder="0" scrolling="0" width="91px" height="20px"
