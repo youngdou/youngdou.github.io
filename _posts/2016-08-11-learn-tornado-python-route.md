@@ -22,12 +22,13 @@ tags:
 [tornado1](http://www.tornadoweb.cn/)
 
 [tornado_github](https://github.com/tornadoweb/tornado/tree/stable)
+
 > 推荐下载github文件包，学习demos文件夹里面的官方demos代码
 
 ## 中文文档
 
-http://tornadocn.readthedocs.io/zh/latest/guide/structure.html
+[文档](http://tornadocn.readthedocs.io/zh/latest/guide/structure.html)
 
 ## 分布式计算课程大纲
 
-http://ss.sysu.edu.cn/~pml/dct/
+[分布式计算](http://ss.sysu.edu.cn/~pml/dct/)
