@@ -91,7 +91,7 @@ tags:
 
 ![image](https://raw.githubusercontent.com/youngdou/youngdou.github.io/master/img/post_imag/2016-09-02/20160928102921.png)
 
-在`src---main`文件夹下新建一个`source fold`, 命名为`resources`
+在`src---main`文件夹下新建一个`Source Folder`, 命名为`resources`
 
 ![image](https://raw.githubusercontent.com/youngdou/youngdou.github.io/master/img/post_imag/2016-09-02/20160928104519.png)
 
@@ -143,7 +143,8 @@ public class QuizProgram {
 
 ![image](https://raw.githubusercontent.com/youngdou/youngdou.github.io/master/img/post_imag/2016-09-02/20160928104827.png)
 
-要使用`StructQuikMastrer`就只需要在`beans.xml`里面修改配置为：
+要使用`StructQuikMastrer`就只需要在`beans.xml`里面修改配置为
+
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
@@ -160,6 +161,7 @@ public class QuizProgram {
 	</bean>
 </beans>
 ```
+
 运行结果
 
 ![image](https://raw.githubusercontent.com/youngdou/youngdou.github.io/master/img/post_imag/2016-09-02/20160928104906.png)
