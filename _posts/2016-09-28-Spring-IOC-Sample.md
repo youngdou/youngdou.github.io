@@ -174,7 +174,7 @@ public class QuizProgram {
 
 ### 3.1 关于代码
 
-- 关于以上讲解的代码托管在我的github:[IOC_test](https://github.com/youngdou/code_for_course_DistributedComputing/tree/master/IOC_test)
+- 关于以上讲解的代码托管在我的github:[IOC_test](https://github.com/youngdou/code_for_courses/tree/master/DistributedComputing/IOC_test)
 
 - 参考文章
 [Spring框架中IoC(控制反转)的原理](http://blog.csdn.net/u012561176/article/details/45974315)
