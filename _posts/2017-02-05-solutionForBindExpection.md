@@ -1,5 +1,3 @@
-# Linux下关闭开机自启动程序
-
 ---
 layout: post
 title:      "Linux下关闭开机自启动程序"
@@ -11,6 +9,7 @@ author:     "Young Dou"
 tags:
     - Linux
 ---
+# Linux下关闭开机自启动程序
 
 ## 问题
 最近启动自己的项目的时候来时出现这个错误
