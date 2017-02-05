@@ -89,7 +89,7 @@ update-rc.d: command not found
 > 咦，权限不够诶，当然啦。
 这里插一句：`update-rc.d`是系统管理员级别权限的命令，只能加`sudo`使用。不然万一被别有用心的一般用户就能使用来设置自启动的监控和后门程序，那主机可就沦为肉鸡了。
 
-amyway,反正这样就可以了
+anyway,反正这样就可以了
 
 ```bash
 young@YOUNG:/etc/lighttpd/conf-enabled$ sudo update-rc.d tomcat7 remove
