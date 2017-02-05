@@ -23,6 +23,7 @@ caused by: java.net.BindException: 地址已在使用
 ## 方案一
 
 先找到占用这个端口的进程，然后kill掉就可以了
+
 ```bash
 young@YOUNG:~$ sudo netstat -anp | grep 8080
 [sudo] young 的密码：
@@ -34,6 +35,7 @@ young@YOUNG:~$ sudo kill -9 1423
 
 
 ## 方案二
+
 ```bash
 young@YOUNG:/etc/lighttpd/conf-enabled$ sudo nmap localhost
 [sudo] young 的密码：
@@ -54,6 +56,7 @@ Nmap done: 1 IP address (1 host up) scanned in 1.66 seconds
 发现占用`8080`端口的是`http-proxy`（http代理）
 
 这是啥呢？我们继续深入探究一下下
+
 ```bash
 young@YOUNG:/etc/lighttpd/conf-enabled$ sudo lsof -i:8080
 [sudo] young 的密码：
@@ -63,15 +66,18 @@ java 1423 tomcat7 54u IPv6 19148 0t0 TCP *:http-alt (LISTEN)
 
 成功发现这玩意原来是我安装的`tomcat7`所自动的
 我们知道，Linux中，开机自启动的程序启动脚本在 `/etc/init.d/`文件夹下的，我们寻根问底，一起过去look look什么情况
+
 ```bash
 young@YOUNG:/etc/init.d$ ls /etc/init.d/ | grep tomcat
 tomcat7
 ```
-![img1](../img/post_imag/2017-02-05/2017-02-05_212840.png) 
+
+![img1](https://raw.githubusercontent.com/youngdou/youngdou.github.io/master/img/post_imag/2017-02-05/2017-02-05_212840.png) 
 
 果然，有一个开机自启动的脚本。怎么办呢？直接删掉也许不太安全，所以我们可以使用一下的方法
 
 下面关闭开机自启动
+
 ```bash
 young@YOUNG:/etc/lighttpd/conf-enabled$ update-rc.d tomcat7 remove
 Command 'update-rc.d' is available in '/usr/sbin/update-rc.d'
@@ -79,18 +85,23 @@ The command could not be located because '/usr/sbin' is not included in the PATH
 This is most likely caused by the lack of administrative priviledges associated with your user account.
 update-rc.d: command not found
 ```
+
 > 咦，权限不够诶，当然啦。
 这里插一句：`update-rc.d`是系统管理员级别权限的命令，只能加`sudo`使用。不然万一被别有用心的一般用户就能使用来设置自启动的监控和后门程序，那主机可就沦为肉鸡了。
 
 amyway,反正这样就可以了
+
 ```bash
 young@YOUNG:/etc/lighttpd/conf-enabled$ sudo update-rc.d tomcat7 remove
 ```
+
 真的可以了吗，我们继续查看`/etc/init.d/`下是否还有tomcat7脚本
+
 ```bash
 young@YOUNG:/etc/init.d$ ls /etc/init.d/ | grep tomcat
 ```
-![img2](../img/post_imag/2017-02-05/2017-02-05_212939.png) 
+
+![img2](https://raw.githubusercontent.com/youngdou/youngdou.github.io/master/img/post_imag/2017-02-05/2017-02-05_212939.png) 
 
 果然没有了，还不信的话启动一下来看看呗。
 
