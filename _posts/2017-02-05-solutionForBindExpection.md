@@ -102,7 +102,7 @@ young@YOUNG:/etc/init.d$ ls /etc/init.d/ | grep tomcat
 ```
 
 
-果然没有了，还不信的话启动一下来看看呗。
+果然没有了，还不信的话重启一下来看看呗。
 
 ```bash
 young@YOUNG:~$ sudo netstat -anp | grep 8080
