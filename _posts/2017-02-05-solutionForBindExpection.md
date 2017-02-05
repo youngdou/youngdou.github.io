@@ -101,13 +101,14 @@ young@YOUNG:/etc/lighttpd/conf-enabled$ sudo update-rc.d tomcat7 remove
 young@YOUNG:/etc/init.d$ ls /etc/init.d/ | grep tomcat
 ```
 
-![img2](https://raw.githubusercontent.com/youngdou/youngdou.github.io/master/img/post_imag/2017-02-05/2017-02-05_212939.png) 
 
 果然没有了，还不信的话启动一下来看看呗。
 
 ```bash
 young@YOUNG:~$ sudo netstat -anp | grep 8080
 ```
+
+![img2](https://raw.githubusercontent.com/youngdou/youngdou.github.io/master/img/post_imag/2017-02-05/2017-02-05_212939.png) 
 
 嘿嘿，果然啥都没有了。
 
