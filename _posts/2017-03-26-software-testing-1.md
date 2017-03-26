@@ -1,10 +1,13 @@
 ---
-title: 软件缺陷
+title: 软件测试【01】-软件缺陷
 tags: 
     - 软件测试
     - 软件工程
 grammar_cjkRuby: true
 ---
+
+
+> 转载请注明出处：[http://blog.csdn.net/YoungDou/article/details/66616964](http://blog.csdn.net/YoungDou/article/details/66616964)
 
 ## 什么是软件缺陷：
 ### IEEE 729‐1983： 
@@ -98,12 +101,12 @@ Software Error ‐> Software Fault ‐> Software Failure
 软件的行为和原本设计的不一致，类似于病人的一系列症状
 - Bug 这个词在软件测试当中不是一个常用的词，它的描述不准确，它甚至包括了Error，Fault，Failure或者其他的软件不正确状态。
 
-![enter description here][1]
+![enter description here][2]
 这里需要注意的是，有时候即使你的程序当中存在Error和Fault，但是在不同的操作和输入下，也不一定出现Failure
 
 
 ### 软件缺陷的构成
-![enter description here][2]
+![enter description here][3]
 很让人惊讶的是软件缺陷很大程度上是由客户需求造成的，前期的需求没做好，或者是在后期的需求变更都会导致很大的软件缺陷问题。那么**规格说明书缺陷**造成的主要原因是什么呢？
 
 #### 客观原因
@@ -120,7 +123,7 @@ Software Error ‐> Software Fault ‐> Software Failure
 
 ### 软件缺陷在不同阶段的分布
 
-![软件缺陷分布][3]
+![软件缺陷分布][1]
 有的企业因为项目软件有过多的缺陷，为了节省修复精力，会选择放弃重来的策略，例如win8.0和win8.1（其实是两个不同的团队做的内核），因为早期win8.0的过多缺陷，微软放弃win8.0而选择了另外一个团队做的win8.1内核。ps:据说迅雷两年以内出了十多个版本的下载器？这是为什么呢？:)
 
 
