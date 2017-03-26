@@ -38,7 +38,7 @@ grammar_cjkRuby: true
 
 ## 软件缺陷状态
 | 缺陷状态     | 描述                                                               |
-| ------------ | ------------------------------------------------------------------ |
+| :------------ | :------------ |
 | 激活或打开 Active or open   | 缺陷还没有解决，在等待处理中，如新报告的缺陷                 |
 | 已修正或修复 Fixed or Resolved|缺陷已被开发人员检查、修复过，通过单元测试，但还没有被测试人员验证|
 | 关闭或激活 Closed or Inactive| 缺陷经测试人员验证后，确认已经修复 、或不存在之后的状态        |
@@ -107,6 +107,7 @@ Software Error ‐> Software Fault ‐> Software Failure
 ##### 1. 需求分析阶段的沟通障碍 
 - 产品功能：软件开发人员和非计算机专业用户对要开发的产品 的功能理解不一致 
 - 产品特性：由于软件产品还没有设计、开发，对于产品的表现 只能凭经验去估计和想象，有些特性还不够清晰 
+
 ##### 2. 用户的需求变化 
 - 用户的需求总是在不断变化的，这些变化如果没有在产品规格 说明书中得到正确的终描述，会引起说明书上下文矛盾 
 
@@ -120,6 +121,6 @@ Software Error ‐> Software Fault ‐> Software Failure
 有的企业因为项目软件有过多的缺陷，为了节省修复精力，会选择放弃重来的策略，例如win8.0和win8.1（其实是两个不同的团队做的内核），因为早期win8.0的过多缺陷，微软放弃win8.0而选择了另外一个团队做的win8.1内核。ps:据说迅雷两年以内出了十多个版本的下载器？这是为什么呢？:)
 
 
-  [1]: ./images/1490325008059.jpg "1490325008059.jpg"
-  [2]: ./images/1490325113895.jpg "1490325113895.jpg"
-  [3]: ./images/1490325927473.jpg "1490325927473.jpg"
+  [1]: https://raw.githubusercontent.com/youngdou/youngdou.github.io/master/img/post_imag/2017-03/1490325008059.jpg "1490325008059.jpg"
+  [2]: https://raw.githubusercontent.com/youngdou/youngdou.github.io/master/img/post_imag/2017-03/1490325113895.jpg "1490325113895.jpg"
+  [3]: https://raw.githubusercontent.com/youngdou/youngdou.github.io/master/img/post_imag/2017-03/1490325927473.jpg "1490325927473.jpg"
