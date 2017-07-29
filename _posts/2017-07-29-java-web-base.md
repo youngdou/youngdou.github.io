@@ -42,7 +42,7 @@ http://so.csdn.net/so/search/s.do?ref=toolbar&q=spring+mvc+mybatis&ref=toolbar&q
 
 ## 基础
 
-- 计算网络
+- 计算机网络
 
 ## 干货网址
 
