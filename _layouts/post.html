@@ -90,6 +90,10 @@ layout: default
                 <!-- disqus 评论框 end -->
                 {% endif %}
 
+                <!-- gitment 评论框 start -->
+                <div id="container"></div>
+                <!-- gitment 评论框 end -->
+
             </div>  
 
     <!-- Side Catalog Container -->
@@ -163,6 +167,23 @@ layout: default
 </script>
 <!-- disqus 公共JS代码 end -->
 {% endif %}
+
+<!-- gitment start -->
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+var gitment = new Gitment({
+  // id: '页面 ID', // 可选。默认为 location.href
+  owner: 'youngdou',
+  repo: 'comment',
+  oauth: {
+    client_id: '2be9a4afe3cfdb1c3084',
+    client_secret: '4a09f0d0d2516b2bcaf6912170b5be6e01c44c42',
+  },
+})
+gitment.render('container')
+</script>
+<!-- gitment end -->
 
 
 {% if site.anchorjs %}
